@@ -2,8 +2,10 @@
 import sys
 import time
 import pprint
+import unittest
 
-from compiler_py.lexer.lexer import Lexer
+from compiler_py.lexer import tests
+from compiler_py.lexer import lexer
 
 
 def main(*args):
@@ -15,8 +17,8 @@ def main(*args):
         txt = f.read()
 
     start = time.perf_counter()
-    lex = Lexer(txt)
-    res = lex.tokenize()
+    lex = lexer.Lexer()
+    res = lex.lex(txt)
     end = time.perf_counter()
 
     print('\n')
@@ -30,6 +32,10 @@ def main(*args):
 
 
 if __name__ == '__main__':
+
+    # run unittest from another file
+    suite = unittest.TestLoader().loadTestsFromModule(tests)
+    unittest.TextTestRunner(verbosity=2).run(suite)
 
     args = sys.argv[1:][0]
     main(args)

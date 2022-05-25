@@ -33,10 +33,10 @@ class Lexer:
     ```
     '''
 
-    def __init__(self, program: str) -> None:
-        self._txt: str = program
+    def __init__(self) -> None:
+        self._txt: str = ''
         self._pos: int = -1
-        self._col: int = 1
+        self._col: int = 0
         self._row: int = 1
         self._res: list = []
 
@@ -45,7 +45,8 @@ class Lexer:
         self._prev_char: str = ''
         self._crnt_char: str = ''
 
-    def tokenize(self) -> list[dict]:
+    def lex(self, program: str) -> list[dict]:
+        self._txt = program
 
         while self._pos < len(self._txt) and self._is_running:
             self._next_char()

@@ -1,15 +1,30 @@
-# testing
-#[dafsdfdaf]#		 
-func exec(joe: str) {
-	let __foo = ("hello worlt ") + joe
-	let _4bar =3.14
-	let bofa = "#lol"
-	let Func = "jijijija"
-	let _b5az = 42++**bar
-	let 8bingus = "joe" # should not be there
-	let bruh: u8 = 123
-	let broh: f32 = 3.1415
-	print(Foo, baz)
+
+#   This is a comment
+### This is another comment
+
+#[
+    Multi-line comments?
+]##[
+    Lets try to break the lexer.
+]#
+
+import imports
+from hello  import world
+from i_will import fubar as this_program
+
+func main(): u32 {
+
+    let foo: class = Foobar()
+    println(foo.get_length(foo.txt))
+    return 0
 }
-# test	
-#[test]#
+
+class Foobar {
+    func init(self): void {
+        self.txt = 'hello'
+    }
+
+    func get_length(txt: str): u32 {
+        return txt.len()
+    }
+}

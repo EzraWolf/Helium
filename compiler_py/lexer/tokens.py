@@ -2,18 +2,18 @@
 # Not using the Enum library because
 # this is simpler and works just fine
 TYPE_UNKNOWN:    str = 'unknown'
-TYPE_KEYWORD:    str = 'keyword'
-TYPE_IDENTIFIER: str = 'identifier'
-TYPE_VARIABLE:   str = 'variable'
-TYPE_STRING:     str = 'string'
-TYPE_INTEGER:    str = 'integer'
-TYPE_FLOAT:      str = 'float'
-TYPE_DELIMITER:  str = 'delimiter'
-TYPE_OPERATOR:   str = 'operator'
+TYPE_KEYWORD:    str = 'kw'
+TYPE_IDENTIFIER: str = 'ident'
+TYPE_VARIABLE:   str = 'var'
+TYPE_STRING:     str = 'str'
+TYPE_INTEGER:    str = 'int'
+TYPE_FLOAT:      str = 'flt'
+TYPE_DELIMITER:  str = 'delim'
+TYPE_OPERATOR:   str = 'op'
 
 # The list of keywords
 KEYWORDS = [
-    'from',   'use',
+    'from',   'import',
     'as',     'let',
     'const',  'typeof',
     'sizeof', 'if',
