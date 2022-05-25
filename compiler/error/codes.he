@@ -1,0 +1,16 @@
+
+enum ErrorCode {
+    OK,             # No errors, running good.
+    Internal,
+    Manual,         # Manually called error. E.G. `throw "I called this error"`
+
+    Import,         # Imported library does not exist
+    ValueType,      # Thrown when an argument is given the wrong value type
+    IndexDNE,       # Index of array does not exist
+    Memory,         # Ran out of memory
+    UnicodeEncode,  # Could not encode Unicode
+    UnicodeDecode,  # Could not decode Unicode
+    DivByZero,      # Don't do that.
+
+    UndefinedVar,   # A variable is being used that hasn't been declared yet
+}

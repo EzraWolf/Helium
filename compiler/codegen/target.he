@@ -1,0 +1,53 @@
+
+local enum Abi {
+    NONE,   # Nothing
+    GCC,    # GNU Compiler Collection
+    SYSV,   # System V
+    MSVC,   # Microsoft Visual C++ Compiler
+    RUSTC   # Rust Compiler
+}
+
+local enum Arch {
+    X86,
+    X64,
+    AVR,
+    ARM,
+    MIPS,
+    RISCV,
+    MSP430,
+    WEBASM,
+    POWERPC
+}
+
+local enum System {
+    NONE,
+    DARWIN,
+    LINUX,
+    WIN32,
+    WIN64
+}
+
+local enum Vendor {
+    NONE,
+    UNKNOWN,
+    MICROSOFT,
+    APPLE
+}
+
+local class Target {
+    setup(abi: Abi, arch: Arch, system: System, vendor: Vendor) {
+        self.abi    = abi
+        self.arch   = arch
+        self.system = system
+        self.vendor = vendor
+    }
+}
+
+
+
+
+
+
+
+
+

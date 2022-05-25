@@ -1,0 +1,25 @@
+
+global enum DataType {
+
+    # Default integer is "I32"
+    I8,   I16,
+    I32,  I64,
+    I128, I256,
+    I512, ISIZE,
+
+    U8,   U16,
+    U32,  U64,
+    U128, U256,
+    U512, USIZE,
+
+    F32,  F64,
+    F128, F256,
+    F512, FSIZE
+    
+    STR,    # FOO = "wow!"
+    CHAR,   # FOO = '!'
+    BOOL,   # FOO = true
+    LIST,   # FOO = ["bar", "baz"]
+    DICT,   # FOO = {"bar": 42, "baz": "foobar"}
+    NONE
+}
