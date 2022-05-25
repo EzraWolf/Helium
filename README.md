@@ -37,10 +37,10 @@ though Helium is statically typed.
 
 
 ## TODO:
-  - [ ] [//////....] 65%: The lexer
-  - [ ] [..........] 0%: The parser
-  - [ ] [..........] 0%: The codegen
-  - [ ] [..........] 0%: The assembler
-  - [ ] [..........] 0%: The bootstrapper
+  - [ ] [65/100]: The lexer
+  - [ ] [00/100]: The parser
+  - [ ] [00/100]: The codegen
+  - [ ] [00/100]: The assembler
+  - [ ] [00/100]: The bootstrapper
   - [x] Setup the Github repository
   - [x] Refactor initial code
