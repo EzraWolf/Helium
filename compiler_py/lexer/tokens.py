@@ -1,8 +1,6 @@
 
 # Not using the Enum library because
-# this is simpler and I plan to  use
-# as  little   external  or  interal
-# libraries       as        possible
+# this is simpler and works just fine
 TYPE_UNKNOWN:    str = 'unknown'
 TYPE_KEYWORD:    str = 'keyword'
 TYPE_IDENTIFIER: str = 'identifier'
@@ -13,6 +11,7 @@ TYPE_FLOAT:      str = 'float'
 TYPE_DELIMITER:  str = 'delimiter'
 TYPE_OPERATOR:   str = 'operator'
 
+# The list of keywords
 KEYWORDS = [
     'from',   'use',
     'as',     'let',
@@ -33,6 +32,7 @@ KEYWORDS = [
     'async',  'await',
 ]
 
+# The start of a potential operator character
 OPERATOR_CHARS = [
     '=', '+',
     '-', '*',
@@ -42,6 +42,7 @@ OPERATOR_CHARS = [
     '^', '~'
 ]
 
+# The list of supported operations
 OPERATORS = [
     '==',   '!=',
     '||',   '^^',
@@ -64,6 +65,7 @@ OPERATORS = [
     '++',   '--',
 ]
 
+# The list of valid delimiters
 DELIMITERS = [
     '.',  ',',
     ':',  ';',

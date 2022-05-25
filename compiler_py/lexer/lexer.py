@@ -3,27 +3,57 @@ from . import tokens as toks
 
 
 class Lexer:
+    '''
+    This is Helium's lexer. Here is where the code from your *.he
+    files gets lexically analyzed and converted into tokens.
+
+    E.G.
+    ```
+    func main(): u32 {
+        print('Hello World')
+    }
+    ```
+
+    Becomes:
+    ```
+    [
+        {'kw'   : 'func'       , 'row': 1, 'col': 1 },
+        {'ident': 'main'       , 'row': 1, 'col': 6 },
+        {'delim': '('          , 'row': 1, 'col': 10},
+        {'delim': ')'          , 'row': 1, 'col': 11},
+        {'delim': ':'          , 'row': 1, 'col': 12},
+        {'var'  : 'u32'        , 'row': 1, 'col': 14}, # Later used as a type
+        {'delim': '{'          , 'row': 1, 'col': 18},
+        {'ident': 'print'      , 'row': 2, 'col': 5 },
+        {'delim': '('          , 'row': 2, 'col': 10},
+        {'str'  : 'Hello World', 'row': 2, 'col': 11},
+        {'delim': ')'          , 'row': 2, 'col': 22},
+        {'delim': '}'          , 'row': 3, 'col': 1 },
+    ]
+    ```
+    '''
+
     def __init__(self, program: str) -> None:
-        self.txt: str = program
-        self.pos: int = -1
-        self.col: int = 1
-        self.row: int = 1
-        self.res: list = []
+        self._txt: str = program
+        self._pos: int = -1
+        self._col: int = 1
+        self._row: int = 1
+        self._res: list = []
 
-        self.is_running: bool = True
+        self._is_running: bool = True
 
-        self.prev_char: str = ''
-        self.crnt_char: str = self.txt[self.pos]
+        self._prev_char: str = ''
+        self._crnt_char: str = ''
 
     def tokenize(self) -> list[dict]:
 
-        while self.pos < len(self.txt) and self.is_running:
+        while self._pos < len(self._txt) and self._is_running:
             self._next_char()
 
             # ======================
             # Ignore all whitespace.
             # ======================
-            if self.crnt_char in toks.WHITESPACE:
+            if self._crnt_char in toks.WHITESPACE:
                 continue
 
             # ================================================
@@ -34,17 +64,17 @@ class Lexer:
             #       This is a multiline comment
             #   ]#
             # ================================================
-            if self.crnt_char == '#':
+            if self._crnt_char == '#':
                 self._next_char()
-                if self.prev_char == '#' and self.crnt_char == '[':
-                    row = self.row - 1
-                    col = self.col + 1
+                if self._prev_char == '#' and self._crnt_char == '[':
+                    row = self._row - 1
+                    col = self._col + 1
 
                     while not (
-                        self.prev_char == ']' and
-                        self.crnt_char == '#'
+                        self._prev_char == ']' and
+                        self._crnt_char == '#'
                     ):
-                        if not self.is_running:
+                        if not self._is_running:
                             raise ValueError(
                                 f'Expected a closing "]#" \
                                 for line {row}, column {col}'
@@ -53,8 +83,8 @@ class Lexer:
 
                 else:
                     while (
-                        self.crnt_char not in ['\n', '\r'] and
-                        self.is_running
+                        self._crnt_char not in ['\n', '\r'] and
+                        self._is_running
                     ):
                         self._next_char()
 
@@ -64,13 +94,13 @@ class Lexer:
             # 2. Loop until we find a non-acceptable sequence.
             # 3. Determin if we have a kw, else an identifier.
             # ================================================
-            if self._is_potential_ident_start(self.crnt_char):
+            if self._is_potential_ident_start(self._crnt_char):
                 res: str = ''
                 while (
-                    self._is_potential_ident_char(self.crnt_char) and
-                    self.is_running
+                    self._is_potential_ident_char(self._crnt_char) and
+                    self._is_running
                 ):
-                    res += self.crnt_char
+                    res += self._crnt_char
                     self._next_char()
 
                 if res in toks.KEYWORDS:
@@ -79,14 +109,14 @@ class Lexer:
                 else:
                     self._append(toks.TYPE_VARIABLE, res)
 
-            if self._is_int(self.crnt_char):
+            if self._is_int(self._crnt_char):
                 res:    str = ''
                 dot_ct: int = 0
-                while self._is_int(self.crnt_char):
-                    res += self.crnt_char
+                while self._is_int(self._crnt_char):
+                    res += self._crnt_char
                     self._next_char()
 
-                    if self.crnt_char == '.':
+                    if self._crnt_char == '.':
                         self._next_char()
                         dot_ct += 1
                         res += '.'
@@ -100,33 +130,33 @@ class Lexer:
                 else:
                     self._append(toks.TYPE_FLOAT, res)
 
-        return self.res
+        return self._res
 
     def _append(self, type: str, value: str) -> None:
-        self.res.append(
+        self._res.append(
             {
                 type: value,
-                'row': self.row,
-                'col': self.col - len(value),
+                'row': self._row,
+                'col': self._col - len(value),
             }
         )
 
     def _next_char(self):
-        if self.pos + 1 >= len(self.txt):
-            self.is_running = False
+        if self._pos + 1 >= len(self._txt):
+            self._is_running = False
             return
 
-        if self.crnt_char in ['\r', '\n']:
-            self.row += 1
-            self.col = 1
+        if self._crnt_char in ['\r', '\n']:
+            self._row += 1
+            self._col = 1
 
         else:
-            self.col += 1
+            self._col += 1
 
-        self.pos += 1
+        self._pos += 1
 
-        self.prev_char = self.crnt_char
-        self.crnt_char = self.txt[self.pos]
+        self._prev_char = self._crnt_char
+        self._crnt_char = self._txt[self._pos]
 
     # Ripped from, and all credit goes to
     # #define is_potential_identifier_start(c)
@@ -173,12 +203,12 @@ class Lexer:
         res: str = ''
         dot_count: int = 0
 
-        while self._is_int(self.crnt_char) and self.is_running:
-            res += self.crnt_char
+        while self._is_int(self._crnt_char) and self._is_running:
+            res += self._crnt_char
             self._next_char()
 
-            if self.crnt_char == '.':
-                res += self.crnt_char
+            if self._crnt_char == '.':
+                res += self._crnt_char
                 dot_count += 1
                 self._next_char()
 
