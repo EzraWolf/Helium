@@ -1,12 +1,20 @@
 
 # Helium-Lang
 
-A handwritten, soon-to-be self compiled language.
+A handwritten, soon-to-be self-compiled language.
 
-Helium's main goal is to bring declarative, yet powerful
-code to compiled languages. There are a vast amount of wonderful
+Helium's goal is to bring declarative yet powerful
+code to compiled languages. There are a lot of great
 compiled languages, yet not many are declarative, let alone
 without their flaws.
+
+## Getting started
+No external dependencies are required to install Helium. The Helium-Py
+compiler is purely written in Python.
+
+1. Clone or download the git repository
+2. Install Python 3.7 or above
+3. Execute `python main.py path/to/your/<file>`
 
 ## Code examples:
 
@@ -32,8 +40,8 @@ Hi world 1
 Hi world 2
 ```
 
-As you can see it's very syntactially similar to Python,
-though Helium is statically typed.
+As you can see, it's very syntactically similar to Python,
+although Helium is statically typed.
 
 
 ## TODO:
