@@ -22,6 +22,7 @@ func main(): u32 {
 class Foobar {
     func init(self): void {
         self.txt = 'hello'
+        let float: f32 = 3.1415
     }
 
     func get_length(txt: str): u32 {

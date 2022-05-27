@@ -46,7 +46,7 @@ class Lexer:
         self._crnt_char: str = ''
 
     def lex(self, program: str) -> list[dict]:
-        self._txt = program
+        self._txt = program + ' '
 
         while self._pos < len(self._txt) and self._is_running:
             self._next_char()
