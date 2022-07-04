@@ -16,7 +16,7 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
+# lib/ # Removed in order to add the helium standard library
 lib64/
 parts/
 sdist/
