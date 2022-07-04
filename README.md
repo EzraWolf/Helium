@@ -1,5 +1,6 @@
 
 # Helium-Lang
+## Version 1.02
 
 A handwritten, soon-to-be self-compiled language.
 
@@ -14,7 +15,19 @@ compiler is purely written in Python.
 
 1. Clone or download the git repository
 2. Install Python 3.7 or above
-3. Execute `python main.py path/to/your/<file>`
+3. Execute `python main.py --file="test.he" --results`*
+
+###### * In order to see any results, currently you must append `--results` to your command
+
+## Command-line arguments:
+| Argument: | Usage:                | Required? | Defaults to: | Information:                                            |
+|-----------|-----------------------|-----------|--------------|---------------------------------------------------------|
+| --file    | --file="your_file.he" | True      | n/a          | This is the file you would like to compile              |
+| --results | --results             | False     | --no-results | This displays the lexers, parsers, and codegens results |
+| --debug*  | --debug               | False     | --no-debug   | This displays useful compiler-related information       |
+| --test    | --test                | False     | --no-test    | This executes the compilers tests before compiling      |
+
+###### * Work in progress argument
 
 ## Code examples:
 
@@ -44,11 +57,25 @@ As you can see, it's very syntactically similar to Python,
 although Helium is statically typed.
 
 
+## Statistics:
+| Module:      | Test-file speed: | Total: | Per Token: | Total per token: |
+|--------------|------------------|--------|------------|------------------|
+| Lexer        | ~1.5ms           | ~1.5ms | ~1.065us   | ~1.065us         |
+| Parser       | n/a              | ~1.5ms | n/a        | ~1.065us         |
+| Codegen      | n/a              | ~1.5ms | n/a        | ~1.065us         |
+| Assembler    | n/a              | ~1.5ms | n/a        | ~1.065us         |
+| Bootstrapper | n/a              | ~1.5ms | n/a        | ~1.065us         |
+
 ## TODO:
-  - [ ] [65/100]: The lexer
+  - [ ] [95/100]: The lexer
   - [ ] [00/100]: The parser
   - [ ] [00/100]: The codegen
   - [ ] [00/100]: The assembler
   - [ ] [00/100]: The bootstrapper
   - [x] Setup the Github repository
   - [x] Refactor initial code
+  - [x] Add lexer tests
+  - [ ] Add parser tests
+  - [ ] Add codegen tests
+  - [ ] Add assembler tests
+  - [ ] Add bootstrapper tests

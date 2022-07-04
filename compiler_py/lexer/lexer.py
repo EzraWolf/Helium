@@ -4,7 +4,7 @@ from . import tokens as toks
 
 class Lexer:
     '''
-    This is Helium's lexer. Here is where the code from your *.he
+    This is Helium's lexer. Here is where the code from your `*.he`
     files gets lexically analyzed and converted into tokens.
 
     E.G.
@@ -22,7 +22,7 @@ class Lexer:
         {'delim': '('          , 'row': 1, 'col': 10},
         {'delim': ')'          , 'row': 1, 'col': 11},
         {'delim': ':'          , 'row': 1, 'col': 12},
-        {'var'  : 'u32'        , 'row': 1, 'col': 14}, # Later used as a type
+        {'var'  : 'u32'        , 'row': 1, 'col': 14}, # Later treated as type
         {'delim': '{'          , 'row': 1, 'col': 18},
         {'ident': 'print'      , 'row': 2, 'col': 5 },
         {'delim': '('          , 'row': 2, 'col': 10},
@@ -54,95 +54,134 @@ class Lexer:
             # ======================
             # Ignore all whitespace.
             # ======================
-            if self._crnt_char in toks.WHITESPACE:
-                continue
+            if self._is_space(self._crnt_char):
+                self._next_char()
 
             # ================================================
             # Check if we have a single, or multiline comment.
             #
             #   # This is a single-line comment
+            #
             #   #[
             #       This is a multiline comment
             #   ]#
             # ================================================
             if self._crnt_char == '#':
-                self._next_char()
-                if self._prev_char == '#' and self._crnt_char == '[':
-                    row = self._row - 1
-                    col = self._col + 1
-
-                    while not (
-                        self._prev_char == ']' and
-                        self._crnt_char == '#'
-                    ):
-                        if not self._is_running:
-                            raise ValueError(
-                                f'Expected a closing "]#" \
-                                for line {row}, column {col}'
-                            )
-                        self._next_char()
-
-                else:
-                    while (
-                        self._crnt_char not in ['\n', '\r'] and
-                        self._is_running
-                    ):
-                        self._next_char()
+                self._handle_comments()
 
             # ================================================
             # Determine if we have a keyword or an identifier.
             # 1. First check for a starting character is good.
             # 2. Loop until we find a non-acceptable sequence.
-            # 3. Determin if we have a kw, else an identifier.
+            # 3. Determine if we have a kw else an identifier.
             # ================================================
             if self._is_potential_ident_start(self._crnt_char):
-                res: str = ''
-                while (
-                    self._is_potential_ident_char(self._crnt_char) and
-                    self._is_running
-                ):
-                    res += self._crnt_char
-                    self._next_char()
+                self._build_ident()
 
-                if res in toks.KEYWORDS:
-                    self._append(toks.TYPE_KEYWORD, res)
+            # ================================================
+            # Check if we have a string if our current char is
+            # a double quote
+            # ================================================
+            if self._crnt_char == '"':
+                self._build_string()
 
-                else:
-                    self._append(toks.TYPE_VARIABLE, res)
-
+            # ================================================
+            # Check if we have an integer or a float
+            # by determining if our character is 0-9
+            # ================================================
             if self._is_int(self._crnt_char):
-                res:    str = ''
-                dot_ct: int = 0
-                while self._is_int(self._crnt_char):
-                    res += self._crnt_char
+                self._build_number()
+
+            # ===============================================
+            # Check if the current character is an operator
+            # ===============================================
+            if self._crnt_char in toks.OPERATOR_CHARS:
+                row = self._row
+                col = self._col
+                operator = ''
+                while self._crnt_char in toks.OPERATOR_CHARS:
+                    operator += self._crnt_char
+                    if self._peak(1) not in toks.OPERATOR_CHARS:
+                        break
+
                     self._next_char()
 
-                    if self._crnt_char == '.':
-                        self._next_char()
-                        dot_ct += 1
-                        res += '.'
+                self._append(
+                    toks.TYPE_OPERATOR,
+                    operator,
+                    row,
+                    col
+                )
 
-                if dot_ct > 1:
-                    raise ValueError(f'Invalid number {res}')
+            # ===============================================
+            # Check if we have a delimiter currently.
+            # ===============================================
+            elif self._crnt_char in toks.DELIMITERS:
+                self._append(
+                    toks.TYPE_DELIMITER,
+                    self._crnt_char,
+                    self._row,
+                    self._col
+                )
 
-                if dot_ct == 0:
-                    self._append(toks.TYPE_INTEGER, res)
+            # ===============================================
+            # We can confidently  say  that  if  our  current
+            # char  is  not   a   delimiter,   operator,   or
+            # whitespace by now, we have an unknown character
+            # ===============================================
+            elif not self._is_space(self._crnt_char):
+                raise SyntaxError(
+                    'Unknown character "{}" at line {}, column {}'
+                    .format(self._crnt_char, self._row, self._col)
+                )
 
-                else:
-                    self._append(toks.TYPE_FLOAT, res)
+        # Clearing the lexer is absolutely  necessary  to
+        # avoid test issues,  as about an hour and a half
+        # of debugging showed it was still trying to lex,
+        # but with previous stored values in self
+        result = self._res
+        self._clear()
 
-        return self._res
+        return result
 
-    def _append(self, type: str, value: str) -> None:
+    def _clear(self):
+        self._txt = ''
+        self._pos = -1
+        self._col = 0
+        self._row = 1
+        self._res = []
+
+        self._is_running = True
+
+        self._prev_char = ''
+        self._crnt_char = ''
+
+    def _append(self, type: str, value: str, row: int, col: int) -> None:
+        """Appends a token to the lexer's result"""
+
         self._res.append(
             {
                 type: value,
-                'row': self._row,
-                'col': self._col - len(value),
+                'row': row,
+                'col': col,
             }
         )
 
+    def _peak(self, amnt: int) -> str:
+        """Safely peaks ahead in the text a specified amount"""
+
+        if self._pos + amnt >= len(self._txt):
+            self._is_running = False
+            return
+
+        return self._txt[self._pos + amnt]
+
     def _next_char(self):
+        """
+        Advances the lexer's position by one character
+        while incrementing the column and row counters
+        """
+
         if self._pos + 1 >= len(self._txt):
             self._is_running = False
             return
@@ -159,20 +198,186 @@ class Lexer:
         self._prev_char = self._crnt_char
         self._crnt_char = self._txt[self._pos]
 
-    # Ripped from, and all credit goes to
-    # #define is_potential_identifier_start(c)
-    # https://github.com/python/cpython/blob/main/Parser/tokenizer.c
+    def _handle_comments(self) -> None:
+        """
+        Loops  through,  and  handles  both
+        single-line and multi-line comments
+        """
+
+        # Consume the starting #
+        self._next_char()
+
+        # A multi-line comment
+        if self._prev_char == '#' and self._crnt_char == '[':
+            row = self._row
+            col = self._col
+
+            # While we have not reached the
+            # end of the comment, increment
+            while not (
+                self._prev_char == ']' and
+                self._crnt_char == '#'
+            ):
+                self._next_char()
+
+                # If we have reached an EOF, the
+                # program ended before a closing
+                if not self._is_running:
+                    raise SyntaxError(
+                        f'Expected a closing "]#" for line {row}, column {col}'
+                    )
+
+            # Consume the closing #
+            self._next_char()
+            return
+
+        # A single-line comment
+        while (
+            self._crnt_char not in ['\n', '\r'] and
+            self._is_running
+        ):
+            self._next_char()
+
+    def _build_ident(self):
+        """Handles identifiers, variables, and keywords"""
+
+        row = self._row
+        col = self._col
+        res: str = ''
+        while (
+            self._is_potential_ident_char(self._crnt_char) and
+            self._is_running
+        ):
+            res += self._crnt_char
+            self._next_char()
+
+        self._append(
+            toks.TYPE_KEYWORD
+            if res in toks.KEYWORDS
+            else toks.TYPE_VARIABLE,
+            res,
+            row,
+            col
+        )
+
+    def _build_string(self):
+        """
+        Builds a string from the given lexer context.
+        The context being the current position in the
+        lexed file, the current character, row,  col,
+        the previous character, etc..
+        """
+
+        row = self._row
+        col = self._col
+        string: str = ''
+
+        # Consume the starting "
+        self._next_char()
+
+        while self._crnt_char != '"':
+            string += self._crnt_char
+
+            # If the next char is the end quote, break
+            if self._peak(1) == '"':
+                self._next_char()
+                break
+
+            self._next_char()
+
+            # If we have reached an EOF, the
+            # program ended before a closing
+            if self._is_running is False:
+                raise SyntaxError(
+                    'Expected a closing \'"\' for line {}, column {}'
+                    .format(row, col)
+                )
+
+        # Consume the closing "
+        self._next_char()
+
+        self._append(
+            toks.TYPE_STRING,
+            string,
+            row,
+            col
+        )
+
+    def _build_number(self):
+        """
+        Builds an int or float  from  the  given  lexer
+        context. The context being the current position
+        in the lexed file, the current character,  row,
+        col, the previous character, etc..
+        """
+
+        number: str = ''
+        dot_ct: int = 0
+        row = self._row
+        col = self._col
+        while (
+            self._is_int(self._crnt_char) and
+            self._is_running
+        ):
+            number += self._crnt_char
+            self._next_char()
+            if self._crnt_char == '.':
+                dot_ct += 1
+                number += self._crnt_char
+                self._next_char()
+
+        # Check for invalid dot counts
+        # 3.1.4 is invalid, and so is .123
+        if dot_ct > 1:
+            raise SyntaxError(f'Invalid number {number}')
+
+        self._append(
+            toks.TYPE_INTEGER
+            if dot_ct == 0
+            else toks.TYPE_FLOAT,
+
+            int(number)
+            if dot_ct == 0
+            else float(number),
+
+            row,
+            col
+        )
+
+    def _is_space(self, char: str) -> bool:
+        """
+        Determines if a character is a whitespace
+        from a pre-determined list of whitespaces
+
+        TODO: Add support for unicode whitespaces
+        """
+
+        return char in toks.WHITESPACE
+
     def _is_potential_ident_start(self, char: str) -> bool:
+        """
+        Determines if a character is the start of a potential identifier
+
+        Ripped from, and all credit goes to the python tokenizer
+        #define is_potential_identifier_start(c)
+        https://github.com/python/cpython/blob/main/Parser/tokenizer.c
+        """
+
         return (
             (char == '_') or
             (ord(char) > 127) or
             (self._is_letter(char))
         )
 
-    # Ripped from, and all credit goes to
-    # #define is_potential_identifier_char(c)
-    # https://github.com/python/cpython/blob/main/Parser/tokenizer.c
     def _is_potential_ident_char(self, char: str) -> bool:
+        """
+        Determines if a character is a potential identifier
+
+        Ripped from, and all credit goes to
+        #define is_potential_identifier_char(c)
+        https://github.com/python/cpython/blob/main/Parser/tokenizer.c
+        """
+
         return (
             (char == '_') or
             (ord(char) > 127) or
@@ -181,45 +386,14 @@ class Lexer:
         )
 
     def _is_letter(self, char: str) -> bool:
+        """Determines if a character is a valid ASCII letter"""
+
         return (
             (char >= 'a' and char <= 'z') or
             (char >= 'A' and char <= 'Z')
         )
 
     def _is_int(self, char: str) -> bool:
+        """Determines if a character is a valid ASCII integer"""
+
         return char >= '0' and char <= '9'
-
-    def _build_float(self, string: str) -> bool:
-        dot_ct: int = 0
-        for char in string:
-            if char == '.':
-                dot_ct += 1
-
-            if (dot_ct > 1) or not (char >= '0' and char <= '9'):
-                return False
-
-        return True
-
-    def _find_num(self):
-        res: str = ''
-        dot_count: int = 0
-
-        while self._is_int(self._crnt_char) and self._is_running:
-            res += self._crnt_char
-            self._next_char()
-
-            if self._crnt_char == '.':
-                res += self._crnt_char
-                dot_count += 1
-                self._next_char()
-
-        if dot_count == 0 and len(res) > 0:
-            self._append(toks.TOKTYPE_INTEGER, res)
-            return res
-
-        elif dot_count == 1 and len(res) > 0:
-            self._append(toks.TOKTYPE_FLOAT, res)
-            return res
-
-        elif dot_count > 1:
-            raise ValueError(f'Too many dots in the number "{res}"')

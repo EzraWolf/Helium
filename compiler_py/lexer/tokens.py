@@ -1,6 +1,6 @@
 
-# Not using the Enum library because
-# this is simpler and works just fine
+# Not using the Enum library  because
+# this is works just fine for its use
 TYPE_UNKNOWN:    str = 'unknown'
 TYPE_KEYWORD:    str = 'kw'
 TYPE_IDENTIFIER: str = 'ident'
@@ -15,7 +15,7 @@ TYPE_OPERATOR:   str = 'op'
 KEYWORDS = [
     'from',   'import',
     'as',     'let',
-    'const',  'typeof',
+    'mut',    'typeof',
     'sizeof', 'if',
     'else',   'switch',
     'case',   'default',
@@ -27,7 +27,6 @@ KEYWORDS = [
     'enum',   'template',
     'class',  'struct',
     'extern', 'return',
-    'try',    'catch',
     'throw',  'assert',
     'async',  'await',
 ]
@@ -36,7 +35,8 @@ KEYWORDS = [
 OPERATOR_CHARS = [
     '=', '+',
     '-', '*',
-    '/', '!',
+    '/', '\\',
+    '!', '%',
     '<', '>',
     '|', '&',
     '^', '~'

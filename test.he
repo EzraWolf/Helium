@@ -1,31 +1,67 @@
 
-#   This is a comment
-### This is another comment
+import std
+import imports
+from foo import bar
+from baz import reallylongtext as rlt
 
 #[
-    Multi-line comments?
-]##[
-    Lets try to break the lexer.
+    This is a test for classes.
 ]#
+class Foobar {
+    init(self, text: str): void {
+        self.text: str = text
+    }
 
-import imports
-from hello  import world
-from i_will import fubar as this_program
+    func printer(self, amnt: u32): void {
+        for i in range(amnt) {
+            std.println(f"{self.text}: {i}")
+        }
 
-func main(): u32 {
-
-    let foo: class = Foobar()
-    println(foo.get_length(foo.txt))
-    return 0
+        std.println("done!")
+    }
 }
 
-class Foobar {
-    func init(self): void {
-        self.txt = 'hello'
-        let float: f32 = 3.1415
-    }
+pub enum Coolometer {
+    Horrible,
+    Bad,
+    Tolerable,
+    Alright,
+    Good,
+    Great,
+    Awesome,
+    Coolest,
+}
 
-    func get_length(txt: str): u32 {
-        return txt.len()
+pub func how_cool(person: str): Coolometer {
+    switch person {
+        case "you": return Coolometer:Tolerable, #JK
+        case "monty python": return Coolometer:Coolest
+        case "US supreme court": return Coolometer:Horrible
+        default {
+            std.println("\
+                I am just a mindless switch statement\
+                and I don't know anything more than what I am given\
+                in this endless world of endless sorrows,\
+                so here is some memory leak for you\
+            ")
+
+            while true {
+                let fubar
+            }
+
+            # How did you break out??
+            return Coolometer:Coolest
+        }
     }
+}
+
+func main(args): u32 {
+
+    # Print us some hello world 128 times
+    let foobar_class = Foobar("Hello World")
+    foobar_class.printer(128)
+
+    how_cool("memory leak please!")
+
+    return 0
 }
