@@ -1,8 +1,8 @@
 
 # Helium-Lang
-## Version 1.02
+### Version 1.03 :tada:
 
-A handwritten, soon-to-be self-compiled language.
+A handwritten soon-to-be self-compiled language
 
 Helium's goal is to bring declarative yet powerful
 code to compiled languages. There are a lot of great
@@ -11,23 +11,24 @@ without their flaws.
 
 ## Getting started
 No external dependencies are required to install Helium. The Helium-Py
-compiler is purely written in Python.
+compiler is written in pure Python and the standalone Helium compiler
+will be self-hosted and independent of any external libraries :sparkles:
 
 1. Clone or download the git repository
 2. Install Python 3.7 or above
 3. Execute `python main.py --file="test.he" --results`*
 
-###### * In order to see any results, currently you must append `--results` to your command
+##### * To see the lexer, AST, or codegen results, you must append `--results` to your command
 
 ## Command-line arguments:
 | Argument: | Usage:                | Required? | Defaults to: | Information:                                            |
 |-----------|-----------------------|-----------|--------------|---------------------------------------------------------|
 | --file    | --file="your_file.he" | True      | n/a          | This is the file you would like to compile              |
-| --results | --results             | False     | --no-results | This displays the lexers, parsers, and codegens results |
+| --results | --results             | False     | --no-results | This displays the lexer, parser, and codegen results |
 | --debug*  | --debug               | False     | --no-debug   | This displays useful compiler-related information       |
 | --test    | --test                | False     | --no-test    | This executes the compilers tests before compiling      |
 
-###### * Work in progress argument
+##### * Work in progress argument
 
 ## Code examples:
 
@@ -53,29 +54,28 @@ Hi world 1
 Hi world 2
 ```
 
-As you can see, it's very syntactically similar to Python,
-although Helium is statically typed.
+Helium is syntactically similar to Python, although it is statically typed :bulb:
 
 
 ## Statistics:
-| Module:      | Test-file speed: | Total: | Per Token: | Total per token: |
-|--------------|------------------|--------|------------|------------------|
-| Lexer        | ~1.5ms           | ~1.5ms | ~1.065us   | ~1.065us         |
-| Parser       | n/a              | ~1.5ms | n/a        | ~1.065us         |
-| Codegen      | n/a              | ~1.5ms | n/a        | ~1.065us         |
-| Assembler    | n/a              | ~1.5ms | n/a        | ~1.065us         |
-| Bootstrapper | n/a              | ~1.5ms | n/a        | ~1.065us         |
+| Module:      | test.he speed: | Total: | Per Token: | Total per token: |
+|--------------|----------------|--------|------------|------------------|
+| Lexer        | ~1.5ms         | ~1.5ms | ~1.065us   | ~1.085us         |
+| AST          | n/a            | ~1.5ms | n/a        | ~1.085us         |
+| Codegen      | n/a            | ~1.5ms | n/a        | ~1.085us         |
+| Assembler    | n/a            | ~1.5ms | n/a        | ~1.085us         |
+| Bootstrapper | n/a            | ~1.5ms | n/a        | ~1.085us         |
 
 ## TODO:
   - [ ] [95/100]: The lexer
-  - [ ] [00/100]: The parser
+  - [ ] [00/100]: The AST (parser)
   - [ ] [00/100]: The codegen
   - [ ] [00/100]: The assembler
   - [ ] [00/100]: The bootstrapper
   - [x] Setup the Github repository
   - [x] Refactor initial code
   - [x] Add lexer tests
-  - [ ] Add parser tests
+  - [ ] Add AST tests
   - [ ] Add codegen tests
   - [ ] Add assembler tests
   - [ ] Add bootstrapper tests

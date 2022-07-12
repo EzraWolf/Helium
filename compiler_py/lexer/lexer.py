@@ -1,40 +1,42 @@
-
 from . import tokens as toks
 
 
 class Lexer:
-    '''
+    """
     This is Helium's lexer. Here is where the code from your `*.he`
     files gets lexically analyzed and converted into tokens.
 
     E.G.
     ```
     func main(): u32 {
-        print('Hello World')
+        print("Hello World")
+        return 0
     }
     ```
 
     Becomes:
     ```
     [
-        {'kw'   : 'func'       , 'row': 1, 'col': 1 },
-        {'ident': 'main'       , 'row': 1, 'col': 6 },
-        {'delim': '('          , 'row': 1, 'col': 10},
-        {'delim': ')'          , 'row': 1, 'col': 11},
-        {'delim': ':'          , 'row': 1, 'col': 12},
-        {'var'  : 'u32'        , 'row': 1, 'col': 14}, # Later treated as type
-        {'delim': '{'          , 'row': 1, 'col': 18},
-        {'ident': 'print'      , 'row': 2, 'col': 5 },
-        {'delim': '('          , 'row': 2, 'col': 10},
-        {'str'  : 'Hello World', 'row': 2, 'col': 11},
-        {'delim': ')'          , 'row': 2, 'col': 22},
-        {'delim': '}'          , 'row': 3, 'col': 1 },
+        {"kw"   : "func"       , "row": 1, "col": 1 },
+        {"ident": "main"       , "row": 1, "col": 6 },
+        {"delim": "("          , "row": 1, "col": 10},
+        {"delim": ")"          , "row": 1, "col": 11},
+        {"delim": ":"          , "row": 1, "col": 12},
+        {"var"  : "u32"        , "row": 1, "col": 14}, # Later treated as type
+        {"delim": "{"          , "row": 1, "col": 18},
+        {"ident": "print"      , "row": 2, "col": 5 },
+        {"delim": "("          , "row": 2, "col": 10},
+        {"str"  : "Hello World", "row": 2, "col": 11},
+        {"delim": ")"          , "row": 2, "col": 24},
+        {"kw"   : "return"     , "row": 3, "col": 5 },
+        {"int"  : 0            , "row": 3, "col": 12},
+        {"delim": "}"          , "row": 4, "col": 1 },
     ]
     ```
-    '''
+    """
 
     def __init__(self) -> None:
-        self._txt: str = ''
+        self._txt: str = ""
         self._pos: int = -1
         self._col: int = 0
         self._row: int = 1
@@ -42,11 +44,11 @@ class Lexer:
 
         self._is_running: bool = True
 
-        self._prev_char: str = ''
-        self._crnt_char: str = ''
+        self._prev_char: str = ""
+        self._crnt_char: str = ""
 
     def lex(self, program: str) -> list[dict]:
-        self._txt = program + ' '
+        self._txt = program + " "
 
         while self._pos < len(self._txt) and self._is_running:
             self._next_char()
@@ -66,7 +68,7 @@ class Lexer:
             #       This is a multiline comment
             #   ]#
             # ================================================
-            if self._crnt_char == '#':
+            if self._crnt_char == "#":
                 self._handle_comments()
 
             # ================================================
@@ -98,7 +100,7 @@ class Lexer:
             if self._crnt_char in toks.OPERATOR_CHARS:
                 row = self._row
                 col = self._col
-                operator = ''
+                operator = ""
                 while self._crnt_char in toks.OPERATOR_CHARS:
                     operator += self._crnt_char
                     if self._peak(1) not in toks.OPERATOR_CHARS:
@@ -106,23 +108,13 @@ class Lexer:
 
                     self._next_char()
 
-                self._append(
-                    toks.TYPE_OPERATOR,
-                    operator,
-                    row,
-                    col
-                )
+                self._append(toks.TYPE_OPERATOR, operator, row, col)
 
             # ===============================================
             # Check if we have a delimiter currently.
             # ===============================================
             elif self._crnt_char in toks.DELIMITERS:
-                self._append(
-                    toks.TYPE_DELIMITER,
-                    self._crnt_char,
-                    self._row,
-                    self._col
-                )
+                self._append(toks.TYPE_DELIMITER, self._crnt_char, self._row, self._col)
 
             # ===============================================
             # We can confidently  say  that  if  our  current
@@ -131,8 +123,9 @@ class Lexer:
             # ===============================================
             elif not self._is_space(self._crnt_char):
                 raise SyntaxError(
-                    'Unknown character "{}" at line {}, column {}'
-                    .format(self._crnt_char, self._row, self._col)
+                    'Unknown character "{}" at line {}, column {}'.format(
+                        self._crnt_char, self._row, self._col
+                    )
                 )
 
         # Clearing the lexer is absolutely  necessary  to
@@ -145,7 +138,7 @@ class Lexer:
         return result
 
     def _clear(self):
-        self._txt = ''
+        self._txt = ""
         self._pos = -1
         self._col = 0
         self._row = 1
@@ -153,8 +146,8 @@ class Lexer:
 
         self._is_running = True
 
-        self._prev_char = ''
-        self._crnt_char = ''
+        self._prev_char = ""
+        self._crnt_char = ""
 
     def _append(self, type: str, value: str, row: int, col: int) -> None:
         """Appends a token to the lexer's result"""
@@ -162,8 +155,8 @@ class Lexer:
         self._res.append(
             {
                 type: value,
-                'row': row,
-                'col': col,
+                "row": row,
+                "col": col,
             }
         )
 
@@ -186,7 +179,7 @@ class Lexer:
             self._is_running = False
             return
 
-        if self._crnt_char in ['\r', '\n']:
+        if self._crnt_char in ["\r", "\n"]:
             self._row += 1
             self._col = 1
 
@@ -208,16 +201,13 @@ class Lexer:
         self._next_char()
 
         # A multi-line comment
-        if self._prev_char == '#' and self._crnt_char == '[':
+        if self._prev_char == "#" and self._crnt_char == "[":
             row = self._row
             col = self._col
 
             # While we have not reached the
             # end of the comment, increment
-            while not (
-                self._prev_char == ']' and
-                self._crnt_char == '#'
-            ):
+            while not (self._prev_char == "]" and self._crnt_char == "#"):
                 self._next_char()
 
                 # If we have reached an EOF, the
@@ -232,10 +222,7 @@ class Lexer:
             return
 
         # A single-line comment
-        while (
-            self._crnt_char not in ['\n', '\r'] and
-            self._is_running
-        ):
+        while self._crnt_char not in ["\n", "\r"] and self._is_running:
             self._next_char()
 
     def _build_ident(self):
@@ -243,21 +230,16 @@ class Lexer:
 
         row = self._row
         col = self._col
-        res: str = ''
-        while (
-            self._is_potential_ident_char(self._crnt_char) and
-            self._is_running
-        ):
+        res: str = ""
+        while self._is_potential_ident_char(self._crnt_char) and self._is_running:
             res += self._crnt_char
             self._next_char()
 
         self._append(
-            toks.TYPE_KEYWORD
-            if res in toks.KEYWORDS
-            else toks.TYPE_VARIABLE,
+            toks.TYPE_KEYWORD if res in toks.KEYWORDS else toks.TYPE_VARIABLE,
             res,
             row,
-            col
+            col,
         )
 
     def _build_string(self):
@@ -270,9 +252,9 @@ class Lexer:
 
         row = self._row
         col = self._col
-        string: str = ''
+        string: str = ""
 
-        # Consume the starting "
+        # Consume the starting '
         self._next_char()
 
         while self._crnt_char != '"':
@@ -289,19 +271,13 @@ class Lexer:
             # program ended before a closing
             if self._is_running is False:
                 raise SyntaxError(
-                    'Expected a closing \'"\' for line {}, column {}'
-                    .format(row, col)
+                    "Expected a closing '\"' for line {}, column {}".format(row, col)
                 )
 
-        # Consume the closing "
+        # Consume the closing '
         self._next_char()
 
-        self._append(
-            toks.TYPE_STRING,
-            string,
-            row,
-            col
-        )
+        self._append(toks.TYPE_STRING, string, row, col)
 
     def _build_number(self):
         """
@@ -311,17 +287,14 @@ class Lexer:
         col, the previous character, etc..
         """
 
-        number: str = ''
+        number: str = ""
         dot_ct: int = 0
         row = self._row
         col = self._col
-        while (
-            self._is_int(self._crnt_char) and
-            self._is_running
-        ):
+        while self._is_int(self._crnt_char) and self._is_running:
             number += self._crnt_char
             self._next_char()
-            if self._crnt_char == '.':
+            if self._crnt_char == ".":
                 dot_ct += 1
                 number += self._crnt_char
                 self._next_char()
@@ -329,19 +302,13 @@ class Lexer:
         # Check for invalid dot counts
         # 3.1.4 is invalid, and so is .123
         if dot_ct > 1:
-            raise SyntaxError(f'Invalid number {number}')
+            raise SyntaxError(f"Invalid number {number}")
 
         self._append(
-            toks.TYPE_INTEGER
-            if dot_ct == 0
-            else toks.TYPE_FLOAT,
-
-            int(number)
-            if dot_ct == 0
-            else float(number),
-
+            toks.TYPE_INTEGER if dot_ct == 0 else toks.TYPE_FLOAT,
+            int(number) if dot_ct == 0 else float(number),
             row,
-            col
+            col,
         )
 
     def _is_space(self, char: str) -> bool:
@@ -363,11 +330,7 @@ class Lexer:
         https://github.com/python/cpython/blob/main/Parser/tokenizer.c
         """
 
-        return (
-            (char == '_') or
-            (ord(char) > 127) or
-            (self._is_letter(char))
-        )
+        return (char == "_") or (ord(char) > 127) or (self._is_letter(char))
 
     def _is_potential_ident_char(self, char: str) -> bool:
         """
@@ -379,21 +342,18 @@ class Lexer:
         """
 
         return (
-            (char == '_') or
-            (ord(char) > 127) or
-            (self._is_int(char)) or
-            (self._is_letter(char))
+            (char == "_")
+            or (ord(char) > 127)
+            or (self._is_int(char))
+            or (self._is_letter(char))
         )
 
     def _is_letter(self, char: str) -> bool:
         """Determines if a character is a valid ASCII letter"""
 
-        return (
-            (char >= 'a' and char <= 'z') or
-            (char >= 'A' and char <= 'Z')
-        )
+        return (char >= "a" and char <= "z") or (char >= "A" and char <= "Z")
 
     def _is_int(self, char: str) -> bool:
         """Determines if a character is a valid ASCII integer"""
 
-        return char >= '0' and char <= '9'
+        return char >= "0" and char <= "9"

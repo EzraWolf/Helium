@@ -36,18 +36,9 @@ local enum Vendor {
 
 local class Target {
     setup(abi: Abi, arch: Arch, system: System, vendor: Vendor) {
-        self.abi    = abi
-        self.arch   = arch
-        self.system = system
-        self.vendor = vendor
+        self.abi:    Abi    = abi
+        self.arch:   Arch   = arch
+        self.system: System = system
+        self.vendor: Vendor = vendor
     }
 }
-
-
-
-
-
-
-
-
-

@@ -1,0 +1,8 @@
+
+# Determine the similarity between two strings
+# E.G.
+# String 1: "Hello World"
+# String 2: "Hello world!"
+#
+# The levenschtein algorithm would return `2`,  because there
+# are two gramatical changes from the first and second string

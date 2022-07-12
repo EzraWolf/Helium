@@ -36,17 +36,16 @@ pub func how_cool(person: str): Coolometer {
     switch person {
         case "you": return Coolometer:Tolerable, #JK
         case "monty python": return Coolometer:Coolest
-        case "US supreme court": return Coolometer:Horrible
+        case "2022 US supreme court": return Coolometer:Horrible
         default {
             std.println("\
-                I am just a mindless switch statement\
-                and I don't know anything more than what I am given\
-                in this endless world of endless sorrows,\
-                so here is some memory leak for you\
-            ")
+I am just a mindless switch statement\
+and I don't know anything more than what I am given\
+in this endless world of endless sorrows,\
+so here is some memory leak for you")
 
             while true {
-                let fubar
+                let fubar: u256
             }
 
             # How did you break out??
