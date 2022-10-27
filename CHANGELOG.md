@@ -1,6 +1,12 @@
 # The change-log:
 
-## Version 1.03 (LATEST):
+## Version 1.04 (LATEST):
+ * Cleaned up `lexer.py`
+ * Maintained consistency and code format
+ * Fixed a handful of `lexer.py` grammar errors
+ * Changed command-line argument names
+
+## Version 1.03:
  * Added a documentation folder, and documented the compiler
  * Added a `how_you_can_contribute.md` file under the documentation folder
  * Cleaned up pre-existing *.MD files

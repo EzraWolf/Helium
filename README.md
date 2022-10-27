@@ -16,17 +16,17 @@ will be self-hosted and independent of any external libraries :sparkles:
 
 1. Clone or download the git repository
 2. Install Python 3.7 or above
-3. Execute `python main.py --file="test.he" --results`*
+3. Execute `python main.py --c="test.he" -r`*
 
-##### * To see the lexer, AST, or codegen results, you must append `--results` to your command
+##### * To see the lexer, AST, or codegen results, you must append `-r` or `--results` to your command
 
 ## Command-line arguments:
-| Argument: | Usage:                | Required? | Defaults to: | Information:                                            |
-|-----------|-----------------------|-----------|--------------|---------------------------------------------------------|
-| --file    | --file="your_file.he" | True      | n/a          | This is the file you would like to compile              |
-| --results | --results             | False     | --no-results | This displays the lexer, parser, and codegen results |
-| --debug*  | --debug               | False     | --no-debug   | This displays useful compiler-related information       |
-| --test    | --test                | False     | --no-test    | This executes the compilers tests before compiling      |
+| Argument:     | Usage:       | Required? | Defaults to: | Information:                                         |
+|---------------|--------------|-----------|--------------|------------------------------------------------------|
+| -c, --compile | -c="file.he" | True      | n/a          | This is the file you would like to compile           |
+| -r, --results | -r           | False     | --no-results | This displays the lexer, parser, and codegen results |
+| -d, --debug*  | -d           | False     | --no-debug   | This displays useful compiler-related information    |
+| -t, --test    | -t           | False     | --no-test    | This executes the compilers tests before compiling   |
 
 ##### * Work in progress argument
 

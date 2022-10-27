@@ -7,7 +7,7 @@ from baz import reallylongtext as rlt
 #[
     This is a test for classes.
 ]#
-class Foobar {
+class ClassFoobar {
     init(self, text: str): void {
         self.text: str = text
     }
@@ -21,46 +21,19 @@ class Foobar {
     }
 }
 
-pub enum Coolometer {
-    Horrible,
-    Bad,
-    Tolerable,
-    Alright,
-    Good,
-    Great,
-    Awesome,
-    Coolest,
+pub enum enum_tester {
+    Works,
+    SortOfWorks,
+    NotOnPayroll,
 }
 
-pub func how_cool(person: str): Coolometer {
-    switch person {
-        case "you": return Coolometer:Tolerable, #JK
-        case "monty python": return Coolometer:Coolest
-        case "2022 US supreme court": return Coolometer:Horrible
-        default {
-            std.println("\
-I am just a mindless switch statement\
-and I don't know anything more than what I am given\
-in this endless world of endless sorrows,\
-so here is some memory leak for you")
-
-            while true {
-                let fubar: u256
-            }
-
-            # How did you break out??
-            return Coolometer:Coolest
-        }
-    }
+func func_name_test(): enum {
+    std.println("Hey world")
+    enum_tester:Works
 }
 
-func main(args): u32 {
-
-    # Print us some hello world 128 times
-    let foobar_class = Foobar("Hello World")
-    foobar_class.printer(128)
-
-    how_cool("memory leak please!")
+func main(args: [str]): u32 {
+    func_name_test()
 
     return 0
 }

@@ -9,7 +9,7 @@ class Lexer:
     E.G.
     ```
     func main(): u32 {
-        print("Hello World")
+        print('Hello World')
         return 0
     }
     ```
@@ -17,20 +17,20 @@ class Lexer:
     Becomes:
     ```
     [
-        {"kw"   : "func"       , "row": 1, "col": 1 },
-        {"ident": "main"       , "row": 1, "col": 6 },
-        {"delim": "("          , "row": 1, "col": 10},
-        {"delim": ")"          , "row": 1, "col": 11},
-        {"delim": ":"          , "row": 1, "col": 12},
-        {"var"  : "u32"        , "row": 1, "col": 14}, # Later treated as type
-        {"delim": "{"          , "row": 1, "col": 18},
-        {"ident": "print"      , "row": 2, "col": 5 },
-        {"delim": "("          , "row": 2, "col": 10},
-        {"str"  : "Hello World", "row": 2, "col": 11},
-        {"delim": ")"          , "row": 2, "col": 24},
-        {"kw"   : "return"     , "row": 3, "col": 5 },
-        {"int"  : 0            , "row": 3, "col": 12},
-        {"delim": "}"          , "row": 4, "col": 1 },
+        {'kw'   : 'func'       , 'row': 1, 'col': 1 },
+        {'ident': 'main'       , 'row': 1, 'col': 6 },
+        {'delim': '('          , 'row': 1, 'col': 10},
+        {'delim': ')'          , 'row': 1, 'col': 11},
+        {'delim': ':'          , 'row': 1, 'col': 12},
+        {'var'  : 'u32'        , 'row': 1, 'col': 14}, # Later treated as type
+        {'delim': '{'          , 'row': 1, 'col': 18},
+        {'ident': 'print'      , 'row': 2, 'col': 5 },
+        {'delim': '('          , 'row': 2, 'col': 10},
+        {'str'  : 'Hello World', 'row': 2, 'col': 11},
+        {'delim': ')'          , 'row': 2, 'col': 24},
+        {'kw'   : 'return'     , 'row': 3, 'col': 5 },
+        {'int'  : 0            , 'row': 3, 'col': 12},
+        {'delim': '}'          , 'row': 4, 'col': 1 },
     ]
     ```
     """
@@ -254,7 +254,7 @@ class Lexer:
         col = self._col
         string: str = ""
 
-        # Consume the starting '
+        # Consume the starting "
         self._next_char()
 
         while self._crnt_char != '"':
@@ -274,7 +274,7 @@ class Lexer:
                     "Expected a closing '\"' for line {}, column {}".format(row, col)
                 )
 
-        # Consume the closing '
+        # Consume the closing "
         self._next_char()
 
         self._append(toks.TYPE_STRING, string, row, col)

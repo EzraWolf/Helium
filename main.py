@@ -1,7 +1,6 @@
 import os
 import time
 import pprint
-import unittest
 import argparse
 
 from compiler_py.lexer import test
@@ -9,11 +8,11 @@ from compiler_py.lexer import lexer
 
 
 def main(args: argparse.Namespace) -> int:
-    if not args.file:
+    if not args.compile_file:
         raise BaseException("Usage: main.py path/to/file/file.he")
 
-    if os.path.exists(args.file):
-        with open(args.file, "r") as f:
+    if os.path.exists(args.compile_file):
+        with open(args.compile_file, "r") as f:
             txt = f.read()
 
     else:
@@ -37,17 +36,18 @@ def main(args: argparse.Namespace) -> int:
 
 
 if __name__ == "__main__":
-
     arg_parse = argparse.ArgumentParser(description="Helium arguments")
     arg_parse.add_argument(
-        "--file",
-        dest="file",
+        "-c",
+        "--compile",
+        dest="compile_file",
         type=str,
         required=True,
-        help="The path to your file",
+        help="The path to the file you are compiling",
     )
 
     arg_parse.add_argument(
+        "-t",
         "--test",
         dest="is_test",
         type=bool,
@@ -58,6 +58,7 @@ if __name__ == "__main__":
     )
 
     arg_parse.add_argument(
+        "-r",
         "--results",
         dest="is_results",
         type=bool,
@@ -68,13 +69,14 @@ if __name__ == "__main__":
     )
 
     arg_parse.add_argument(
+        "-d",
         "--debug",
         dest="is_debug",
         type=bool,
         default=False,
         required=False,
         action=argparse.BooleanOptionalAction,
-        help="Allows the user to optionally print debug information",
+        help="Allows the user to print debug information",
     )
 
     args: argparse.Namespace = arg_parse.parse_args()
