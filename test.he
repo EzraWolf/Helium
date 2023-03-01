@@ -2,7 +2,7 @@
 import std
 import imports
 from foo import bar
-from baz import reallylongtext as rlt
+from baz import a as b
 
 #[
     This is a test for classes.
@@ -13,7 +13,7 @@ class ClassFoobar {
     }
 
     func printer(self, amnt: u32): void {
-        for i in range(amnt) {
+        for i in 0..amnt {
             std.println(f"{self.text}: {i}")
         }
 

@@ -10,7 +10,7 @@ TYPE_DELIMITER: str = "delim"
 TYPE_OPERATOR: str = "op"
 
 # The list of keywords
-KEYWORDS = [
+KEYWORDS: list[str] = [
     "from",
     "import",
     "as",
@@ -25,12 +25,10 @@ KEYWORDS = [
     "default",
     "for",
     "in",
-    "range",
     "do",
     "break",
     "continue",
     "while",
-    "global",
     "func",
     "pass",
     "enum",
@@ -41,12 +39,12 @@ KEYWORDS = [
     "return",
     "throw",
     "assert",
-    "async",
-    "await",
+    "true",
+    "false",
 ]
 
 # The start of a potential operator character
-OPERATOR_CHARS = ["=", "+", "-", "*", "/", "\\", "!", "%", "<", ">", "|", "&", "^", "~"]
+OPERATOR_CHARS = ["=", "+", "-", "*", "/", "//", "!", "%", "<", ">", "|", "&", "^", "~"]
 
 # The list of supported operations
 OPERATORS = [
@@ -96,8 +94,8 @@ DELIMITERS = [
     ",",
     ":",
     ";",
-    "'",
     '"',
+    "'",
     "(",
     ")",
     "[",

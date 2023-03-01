@@ -1,6 +1,13 @@
 # The change-log:
 
-## Version 1.04 (LATEST):
+## Version 1.05 (LATEST):
+ * Removed the `range` keyword in favor of `x..y`
+ * Removed the `global` keyboard, useless.
+ * Removed the `try` and `catch` keywords, you should never have to use these in good code
+ * Restructured `lexer.py`
+ * Temporarily removed the `async` and `await` keywords, not ready to add them yet.
+
+## Version 1.04:
  * Cleaned up `lexer.py`
  * Maintained consistency and code format
  * Fixed a handful of `lexer.py` grammar errors

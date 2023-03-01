@@ -1,6 +1,6 @@
 
 # Helium-Lang
-### Version 1.03 :tada:
+### Version 1.04 :tada:
 
 A handwritten soon-to-be self-compiled language
 
