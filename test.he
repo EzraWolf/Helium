@@ -1,8 +1,8 @@
 
-import std
-import imports
-from foo import bar
-from baz import a as b
+import ./std
+import ./imports
+import foo from ./bar
+import a from ./baz as b
 
 #[
     This is a test for classes.
@@ -12,6 +12,7 @@ class ClassFoobar {
         self.text: str = text
     }
 
+    # Random comment
     func printer(self, amnt: u32): void {
         for i in 0..amnt {
             std.println(f"{self.text}: {i}")
@@ -21,19 +22,18 @@ class ClassFoobar {
     }
 }
 
-pub enum enum_tester {
+pub enum HelloEnum {
     Works,
     SortOfWorks,
-    NotOnPayroll,
+    Nada,
 }
 
 func func_name_test(): enum {
     std.println("Hey world")
-    enum_tester:Works
+    HelloEnum:Works
 }
 
 func main(args: [str]): u32 {
     func_name_test()
-
     return 0
 }

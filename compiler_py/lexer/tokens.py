@@ -44,7 +44,22 @@ KEYWORDS: list[str] = [
 ]
 
 # The start of a potential operator character
-OPERATOR_CHARS = ["=", "+", "-", "*", "/", "//", "!", "%", "<", ">", "|", "&", "^", "~"]
+OPERATOR_CHARS = [
+    "=",
+    "+",
+    "-",
+    "*",
+    "/",
+    "//",
+    "!",
+    "%",
+    "<",
+    ">",
+    "|",
+    "&",
+    "^",
+    "~",
+]
 
 # The list of supported operations
 OPERATORS = [

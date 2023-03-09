@@ -228,7 +228,26 @@ class Lexer:
             self.__next_char()
 
     def __read_import_stmt(self):
-        """`import <lib>`"""
+        """
+        All import cases covered in this function:
+
+        `import ./<lib>`
+        `import ./<lib> as <foo>`
+        `import ./<lib>/<dir>`
+        `import ./<lib>/<dir> as <foo>`
+        `import ../<lib>`
+        `import ../<lib> as <foo>`
+        `import ../<lib>/<dir>`
+        `import ../<lib>/<dir> as <foo>`
+        `import <baz> from ./<lib>`
+        `import <baz> from ./<lib> as <foo>`
+        `import <baz> from ./<lib>/<dir>`
+        `import <baz> from ./<lib>/<dir> as <foo>`
+        `import <baz> from ../<lib>`
+        `import <baz> from ../<lib> as <foo>`
+        `import <baz> from ../<lib>/<dir>`
+        `import <baz> from ../<lib>/<dir> as <foo>`
+        """
         pass
 
     def __read_from_import_stmt(self):
@@ -236,11 +255,11 @@ class Lexer:
         pass
 
     def __read_lib_func_stmt(self):
-        """`<lib>.function(<args>)`"""
+        """`lib>.function(<args>)`"""
         pass
 
     def __read_lib_obj_stmt(self):
-        """`<lib>.<class | enum | template | ...>`"""
+        """`lib>.<class | enum | template | ...>`"""
 
     def __read_let_stmt(self):
         """`let: <type> = <const | var>`"""
@@ -276,7 +295,8 @@ class Lexer:
     def __read_while_loop_stmt(self):
         """
         `while <cond> { ... }`, and
-        `do { ... } while <cond>`"""
+        `do { ... } while <cond>`
+        """
         pass
 
     def __read_func_stmt(self):
@@ -381,7 +401,6 @@ line {}, column {}".format(
 
         # Consume the closing '
         self.__next_char()
-
         self.__append(toks.TYPE_STRING, string, row, col)
 
     def __build_number(self):
@@ -423,7 +442,6 @@ line {}, column {}".format(
 
         TODO: Add support for unicode whitespaces
         """
-
         return char in toks.WHITESPACE
 
     def __is_potential_ident_start(self, char: str) -> bool:
@@ -434,7 +452,6 @@ line {}, column {}".format(
         #define is_potential_identifier_start(c)
         https://github.com/python/cpython/blob/main/Parser/tokenizer.c
         """
-
         return (char == "_") or (ord(char) > 127) or (self.__is_letter(char))
 
     def __is_potential_ident_char(self, char: str) -> bool:
@@ -445,7 +462,6 @@ line {}, column {}".format(
         #define is_potential_identifier_char(c)
         https://github.com/python/cpython/blob/main/Parser/tokenizer.c
         """
-
         return (
             (char == "_")
             or (ord(char) > 127)
@@ -455,10 +471,8 @@ line {}, column {}".format(
 
     def __is_letter(self, char: str) -> bool:
         """Determines if a character is a valid ASCII letter"""
-
         return (char >= "a" and char <= "z") or (char >= "A" and char <= "Z")
 
     def __is_int(self, char: str) -> bool:
         """Determines if a character is a valid ASCII integer"""
-
         return char >= "0" and char <= "9"
