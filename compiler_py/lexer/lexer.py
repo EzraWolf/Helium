@@ -9,35 +9,35 @@ class Lexer:
     E.G.
     ```
     func main(): u32 {
-        print('Hello World')
-        return 0
+            print('Hello World')
+            return 0
     }
     ```
 
     Becomes:
     ```
     [
-        {'kw'   : 'func'       , 'row': 1, 'col': 1 },
-        {'ident': 'main'       , 'row': 1, 'col': 6 },
-        {'delim': '('          , 'row': 1, 'col': 10},
-        {'delim': ')'          , 'row': 1, 'col': 11},
-        {'delim': ':'          , 'row': 1, 'col': 12},
-        {'var'  : 'u32'        , 'row': 1, 'col': 14}, # Later treated as type
-        {'delim': '{'          , 'row': 1, 'col': 18},
-        {'ident': 'print'      , 'row': 2, 'col': 5 },
-        {'delim': '('          , 'row': 2, 'col': 10},
-        {'str'  : 'Hello World', 'row': 2, 'col': 11},
-        {'delim': ')'          , 'row': 2, 'col': 24},
-        {'kw'   : 'return'     , 'row': 3, 'col': 5 },
-        {'int'  : 0            , 'row': 3, 'col': 12},
-        {'delim': '}'          , 'row': 4, 'col': 1 },
+            {'kw'   : 'func'       , 'row': 1, 'col': 1 },
+            {'ident': 'main'       , 'row': 1, 'col': 6 },
+            {'delim': '('          , 'row': 1, 'col': 10},
+            {'delim': ')'          , 'row': 1, 'col': 11},
+            {'delim': ':'          , 'row': 1, 'col': 12},
+            {'var'  : 'u32'        , 'row': 1, 'col': 14}, # Later treated as type
+            {'delim': '{'          , 'row': 1, 'col': 18},
+            {'ident': 'print'      , 'row': 2, 'col': 5 },
+            {'delim': '('          , 'row': 2, 'col': 10},
+            {'str'  : 'Hello World', 'row': 2, 'col': 11},
+            {'delim': ')'          , 'row': 2, 'col': 24},
+            {'kw'   : 'return'     , 'row': 3, 'col': 5 },
+            {'int'  : 0            , 'row': 3, 'col': 12},
+            {'delim': '}'          , 'row': 4, 'col': 1 },
     ]
     ```
     """
 
     def __init__(self) -> None:
         self.__txt: str = ""
-        self.__pos: int = -1
+        self.__pos: int = -1  # u64 in the self-compiled compiler
         self.__col: int = 0
         self.__row: int = 1
         self.__res: list = []
@@ -49,7 +49,6 @@ class Lexer:
 
     def lex(self, program: str) -> list[dict]:
         self.__txt = program + " "
-
         while self.__pos < len(self.__txt) and self.__is_running:
             self.__next_char()
 
@@ -65,7 +64,7 @@ class Lexer:
             #   # This is a single-line comment
             #
             #   #[
-            #       This is a multiline comment
+            #      This is a multi-line comment
             #   ]#
             # ================================================
             if self.__crnt_char == "#":
@@ -171,9 +170,9 @@ class Lexer:
 
         return self.__txt[self.__pos + amnt]
 
-    def __next_char(self):
+    def __next_char(self) -> None:
         """
-        Advances the lexer's position by one character
+                Advances the lexer's position by one character
         while incrementing the column and row counters
         """
 
@@ -189,7 +188,6 @@ class Lexer:
             self.__col += 1
 
         self.__pos += 1
-
         self.__prev_char = self.__crnt_char
         self.__crnt_char = self.__txt[self.__pos]
 
@@ -227,115 +225,7 @@ class Lexer:
         while self.__crnt_char not in ["\n", "\r"] and self.__is_running:
             self.__next_char()
 
-    def __read_import_stmt(self):
-        """
-        All import cases covered in this function:
-
-        `import ./<lib>`
-        `import ./<lib> as <foo>`
-        `import ./<lib>/<dir>`
-        `import ./<lib>/<dir> as <foo>`
-        `import ../<lib>`
-        `import ../<lib> as <foo>`
-        `import ../<lib>/<dir>`
-        `import ../<lib>/<dir> as <foo>`
-        `import <baz> from ./<lib>`
-        `import <baz> from ./<lib> as <foo>`
-        `import <baz> from ./<lib>/<dir>`
-        `import <baz> from ./<lib>/<dir> as <foo>`
-        `import <baz> from ../<lib>`
-        `import <baz> from ../<lib> as <foo>`
-        `import <baz> from ../<lib>/<dir>`
-        `import <baz> from ../<lib>/<dir> as <foo>`
-        """
-        pass
-
-    def __read_from_import_stmt(self):
-        """`from <lib> import foo`"""
-        pass
-
-    def __read_lib_func_stmt(self):
-        """`lib>.function(<args>)`"""
-        pass
-
-    def __read_lib_obj_stmt(self):
-        """`lib>.<class | enum | template | ...>`"""
-
-    def __read_let_stmt(self):
-        """`let: <type> = <const | var>`"""
-        pass
-
-    def __read_let_mut_stmt(self):
-        """`let mut: <type> = <const | var>`"""
-        pass
-
-    def __read_if_stmt(self):
-        """
-        `if <cond> { ... }`,
-        `if <cond> { ... } else { ... }` and,
-        `if <cond> { ... } else if <cond> { ... }`
-        """
-        pass
-
-    def __read_inline_if_stmt(self):
-        """`<cond> ? true : false`"""
-        pass
-
-    def __read_switch_stmt(self):
-        """`switch <var> { case: ... default: }`"""
-        pass
-
-    def __read_for_loop_stmt(self):
-        """
-        `for i in 0..n { ... }`,
-        `for i in <iterable> { ... }`
-        """
-        pass
-
-    def __read_while_loop_stmt(self):
-        """
-        `while <cond> { ... }`, and
-        `do { ... } while <cond>`
-        """
-        pass
-
-    def __read_func_stmt(self):
-        """`func <ident>(<args>): <type> { ... }`"""
-        pass
-
-    def __read_enum_stmt(self):
-        """`enum <ident> { ... }`"""
-        pass
-
-    def __read_template_stmt(self):
-        """`template <ident> { ... }`"""
-        pass
-
-    def __read_class_stmt(self):
-        """`class <ident> { ... }`"""
-        pass
-
-    def __read_struct_stmt(self):
-        """`struct <ident> { ... }`"""
-        pass
-
-    def __read_extern_stmt(self):
-        """`extern "<lang>" <ident>(<args>): <type>`"""
-        pass
-
-    def __read_try_catch_stmt(self):
-        """`try { ... } catch <err> "<msg>"`"""
-        pass
-
-    def __read_throw_stmt(self):
-        """`throw <err> "<msg>"`"""
-        pass
-
-    def __read_assert_stmt(self):
-        """`assert <cond> "<err msg>"`"""
-        pass
-
-    def __build_ident(self):
+    def __build_ident(self) -> None:
         """Handles identifiers, variables, and keywords"""
 
         row = self.__row
@@ -345,8 +235,8 @@ class Lexer:
             res += self.__crnt_char
             self.__next_char()
 
-            if res == "import":
-                self.__read_import_stmt()
+            # if res == "import":
+            # self.__read_import_stmt()
 
         self.__append(
             toks.TYPE_KEYWORD if res in toks.KEYWORDS else toks.TYPE_VARIABLE,
@@ -355,7 +245,7 @@ class Lexer:
             col,
         )
 
-    def __build_string(self):
+    def __build_string(self) -> None:
         """
         Builds a string from the given lexer context.
         The context being the current position in the
@@ -399,11 +289,11 @@ line {}, column {}".format(
                     )
                 )
 
-        # Consume the closing '
+        # Consume the closing "'"
         self.__next_char()
         self.__append(toks.TYPE_STRING, string, row, col)
 
-    def __build_number(self):
+    def __build_number(self) -> None:
         """
         Builds an int or float  from  the  given  lexer
         context. The context being the current position

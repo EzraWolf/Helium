@@ -4,36 +4,37 @@ import ./imports
 import foo from ./bar
 import a from ./baz as b
 
+# Hello world
 #[
-    This is a test for classes.
+	This is a test for classes.
 ]#
 class ClassFoobar {
-    init(self, text: str): void {
-        self.text: str = text
-    }
+	init(self, text: str): void {
+		self.text: str = text
+	}
 
-    # Random comment
-    func printer(self, amnt: u32): void {
-        for i in 0..amnt {
-            std.println(f"{self.text}: {i}")
-        }
+	# Random comment
+	func printer(self, amnt: u32): void {
+		for i in 0..amnt {
+			std.println(f"{self.text}: {i}")
+		}
 
-        std.println("done!")
-    }
+		std.println("done!")
+	}
 }
 
 pub enum HelloEnum {
-    Works,
-    SortOfWorks,
-    Nada,
+	Works,
+	SortOfWorks,
+	Nada,
 }
 
 func func_name_test(): enum {
-    std.println("Hey world")
-    HelloEnum:Works
+	std.println("Hey world")
+	HelloEnum:Works
 }
 
 func main(args: [str]): u32 {
-    func_name_test()
-    return 0
+	func_name_test()
+	return 01.8 as u32
 }

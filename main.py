@@ -80,7 +80,6 @@ if __name__ == "__main__":
     )
 
     args: argparse.Namespace = arg_parse.parse_args()
-
     if args.is_test:
         test.execute()
 

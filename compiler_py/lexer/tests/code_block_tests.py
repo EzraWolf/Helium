@@ -1,18 +1,18 @@
 """
 Tests the following:
-    - Library imports
-    - Class declarations
-    - Class use
-    - Function declarations
-    - Function use
-    - Struct declarations
-    - Struct use
-    - Enum declarations
-    - Enum use
-    - Template declarations
-    - Template use
-    - Variable declarations
-    - Variable use
+	- Library imports
+	- Class declarations
+	- Class use
+	- Function declarations
+	- Function use
+	- Struct declarations
+	- Struct use
+	- Enum declarations
+	- Enum use
+	- Template declarations
+	- Template use
+	- Variable declarations
+	- Variable use
 """
 
 import unittest
@@ -22,9 +22,9 @@ from compiler_py.lexer import lexer
 
 
 # ====================================== #
-#                                        #
+# 										#
 # === IMPORT TESTING =================== #
-#                                        #
+# 										#
 # ====================================== #
 class TestLexerImports(unittest.TestCase):
     def __init__(self, *args, **kwargs):
@@ -133,9 +133,9 @@ class TestLexerImports(unittest.TestCase):
 
 
 # ====================================== #
-#                                        #
+# 										#
 # === CLASS TESTING ==================== #
-#                                        #
+# 										#
 # ====================================== #
 class TestLexerClasses(unittest.TestCase):
     def __init__(self, *args, **kwargs):
@@ -145,13 +145,13 @@ class TestLexerClasses(unittest.TestCase):
     def test_class_def(self):
         test: str = """\
 class Foo {
-    init(self) {
-        self.num = 42
-    }
+	init(self) {
+		self.num = 42
+	}
 
-    func foo(self) {
-        return self.num
-    }
+	func foo(self) {
+		return self.num
+	}
 }"""
         res = self.lexer.lex(test)
         self.assertEqual(
@@ -234,7 +234,7 @@ let mut foobar = foo.baz * 10
 
 # True
 if (foobar - 3) == 120 {
-    std.println("foobar is infact, 120")
+	std.println("foobar is infact, 120")
 }
 """
         res = self.lexer.lex(test)
@@ -292,9 +292,9 @@ if (foobar - 3) == 120 {
 
 
 # ======================================== #
-#                                          #
+# 										  #
 # === FUNCTION TESTING =================== #
-#                                          #
+# 										  #
 # ======================================== #
 class TestLexerFunctions(unittest.TestCase):
     def __init__(self, *args, **kwargs):
@@ -304,9 +304,9 @@ class TestLexerFunctions(unittest.TestCase):
     def test_func_def(self):
         test: str = """\
 func main(): u32 {
-    let text = "Hi, world."
-    println(text)
-    return 0
+	let text = "Hi, world."
+	println(text)
+	return 0
 }"""
         res = self.lexer.lex(test)
         self.assertEqual(
@@ -345,9 +345,9 @@ func main(): u32 {
 
 
 # ====================================== #
-#                                        #
+# 										#
 # === STRUCT TESTING =================== #
-#                                        #
+# 										#
 # ====================================== #
 class TestLexerStructs(unittest.TestCase):
     def __init__(self, *args, **kwargs):
@@ -368,9 +368,9 @@ class TestLexerStructs(unittest.TestCase):
 
 
 # ==================================== #
-#                                      #
+# 									  #
 # === ENUM TESTING =================== #
-#                                      #
+# 									  #
 # ==================================== #
 class TestLexerEnums(unittest.TestCase):
     def __init__(self, *args, **kwargs):
@@ -391,9 +391,9 @@ class TestLexerEnums(unittest.TestCase):
 
 
 # ======================================== #
-#                                          #
+# 										  #
 # === TEMPLATE TESTING =================== #
-#                                          #
+# 										  #
 # ======================================== #
 class TestLexerTempaltes(unittest.TestCase):
     def __init__(self, *args, **kwargs):
@@ -414,9 +414,9 @@ class TestLexerTempaltes(unittest.TestCase):
 
 
 # ======================================== #
-#                                          #
+# 										  #
 # === VARIABLE TESTING =================== #
-#                                          #
+# 										  #
 # ======================================== #
 class TestLexerVariables(unittest.TestCase):
     def __init__(self, *args, **kwargs):
